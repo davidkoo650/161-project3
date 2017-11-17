@@ -1,0 +1,14 @@
+The key here is to recognize that the size variable in display is of the data type int8_t, and that it gets passed into fread. The ‘size’ argument in fread is parameterized as a size_t data type, which means that fread will read the int8_t size as an unsigned integer. This presents a buffer overflow vulnerability, which we will manipulate to gain access to the privileges of smith. 
+
+We structure our input such that the first byte of the file reads “\xff”, which will be a very large positive value when read as an unsigned integer. This first byte determines the value of ‘size_t n’. Right after “\xff”, we can insert our shellcode such that it is contained at the beginning of msg (portrayed below). 
+
+(gdb) x/64x msg
+0xbffff5b8:	0x895e1feb	0xc0310876	0x89074688	0x0bb00c46
+0xbffff5c8:	0x4e8df389	0x0c568d08	0xdb3180cd	0xcd40d889
+0xbffff5d8:	0xffdce880	0x622fffff	0x732f6e69	0x32313068
+
+We know that the $eip is located at 0xbffff64c, and we want to overwrite it such that it points to the beginning of msg. Since msg starts at 0xbffff5b8, (148 below the $eip), and our shell code is 45 bytes long, we need 103 filler characters before we overwrite the $eip to the address of msg. As indicated below, the overwritten $eip points to 0xbffff5b8, the beginning of msg. 
+
+0xbffff648:	0x32313039	0xbffff5b8	0xbffff70a	0x00000000
+
+This means that we jump to the shell code at the conclusion of the function, which is exactly what we wanted. 

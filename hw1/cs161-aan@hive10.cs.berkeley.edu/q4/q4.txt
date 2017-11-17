@@ -1,0 +1,23 @@
+The key here is to use the ret2esp technique specified in “ASLR Smack & Laugh Reference”. Since 0xffe4 is interpreted as (jump *esp) as an instruction, our goal will be to find this magic number somewhere in memory and overwrite the RIP with this value. 
+
+We see that when calling info frame inside the handle function in gdb, eip is at 0xbffff60c. Below that, observe that buf is located at 0xbfffd700. This means that the buffer is 7948 bytes below the eip. 
+
+Saved registers:
+ebp at 0xbffff608, eip at 0xbffff60c
+(gdb) 
+
+(gdb) p &buf
+$1 = (char (*)[7936]) 0xbfffd700
+
+Since we want to do is overwrite the eip as the magic number, we use 7948 filler characters to overwrite memory with garbage until we get to our desired eip address. 
+
+Now, the task at hand is to overwrite this eip address with our magic number so that we can execute the (jump *esp) instruction. We do this by exploiting the fact that the magic number 58623 exists inside the magic function, and that the text segment is not randomized. We know that the text segment of the magic function contains our desired value, so we locate by calling x/8x magic. We then realize that 0x0804861c translates to     jump *%esp. 
+
+(gdb) x/8x magic
+0x8048604 <magic>:	0x8be58955	0xe0c10c45	0x08453103	0xc108458b
+0x8048614 <magic+16>:	0x453103e0	0x084d810c	0x0000e4ff	0xba0c4d8b
+
+(gdb) x/i 0x0804861c
+   0x804861c <magic+24>:	jmp    *%esp
+
+Now, we use this address 0x80461c to overwrite the eip, which is exactly what we do by appending this address directly after our 7948 filler characters. We know that after the RIP has been loaded, the position of the ESP is always one location above the rip. Since the jump command will proceed to the program flow of the address where ESP points to, we place our shellcode directly after our magic number. This eventually results in a jump to execute our shellcode, which gives us the access privileges that we desire. 

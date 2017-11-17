@@ -1,0 +1,106 @@
+Section Notes.
+
+Question 4 -> Lecture 18 (Beware! Slides).
+
+Question 2:
+
+Ping Google.com -> Live
+
+source = random.randint(2000, 30000)
+seq = random.randint(1, 31313131)
+self.send_pkt(sport. source, seq = seq, flaq = "S")
+pkt = self.get_pkt() // Receive. 
+
+if (isTimeExceeded(pkt)):
+return "DEAD"
+else:
+y = pkt[TCP].seq
+self.send_pkt(sport = srouce, ack = y+1, flags = "A", seq = seq + 1, payload = triggerfetch)
+pkt = self.get_pkt()
+while pkt:
+if isRST(pkt):
+return Firewall
+pkt = self.get_pkt()
+return "Live"
+
+// What should the payload be?
+
+1. payload = same thing that triggered part 1. Use part 1 in order to answer part 2. Trigger the great firewall.
+
+2. 
+
+triggerfetch = 'Get /search?q=falun HTTP/11\r\nHost: www.google.com\r' // Not verbatim. 
+
+// Use get_pkt. sudo python ping.py -> should return firewall. 
+
+
+Question 3:
+
+Having us implement traceroute().
+
+command -> traceroute yahoo.com
+
+- Number of hops to IP address specified.
+
+How to start? 
+
+- After initial handshake, every time data is sent, TTL is specified.
+- TTL is used to count the number of hops that we're using.
+- Gradually increment TTL until we reach the destination.
+
+Pseudocode:
+
+ip_list, rst_list = [], []
+source = random
+seq = random
+self.send_pkt(sport = source, seq = seq, flags = "S")
+pkt = self.get_pkt()
+y = pkt[TCP].seq
+
+for i in range (1, hops):
+
+self.send_pkt(ttl = i, sport = source, ack = y + 1, )
+self.send_pkt
+self.send_pkt
+pkt = self.get_pkt
+prev = None
+while pkt:
+prev = pkt
+
+
+
+// Append rs_list and ip_list. 
+
+return (ip_list, rst_list)
+
+
+// How to do handshake on each hop?
+
+1. Do regular handshake like part 2.
+2. TTL determines variation in handshake. 
+
+
+
+Question 4: 
+
+- Send packets in such a way that web server constructs it correctly but the firewall doesn't.
+- Successful response from the web server.
+- Return all the payload returned by the server over the next 5 seconds.
+- Lecture 18 (pg. 15) - DNS Lecture. 
+- Firewall and receiver reception is different. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

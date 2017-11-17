@@ -1,0 +1,110 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf760
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww16220\viewh10980\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 Problem 1:\
+
+\b0 \
+(a) True \
+(b) True\
+(c) False\
+(d) False\
+(e) True \
+\
+
+\b Problem 2: \
+
+\b0 \
+(a)\
+\
+The answer is yes. Mallory knows (1) M is a simple and short reply from a small pool of possibilities, (2) Bob will use same k for both Mallory and Alice, and (3) Alice\'92s and her own IV. Suppose we call Alice\'92s initialization vector IV1 and Mallory\'92s initialization vector IV2, call Alice\'92s ciphertext C1 and Mallory\'92s ciphertext C2, and call Alice\'92s plaintext M1 and Mallory\'92s plaintext M2. \
+\
+According to CBC mode, C1 = E( (M1 XOR IV1), K ) and C2 = E( (M2 XOR IV2), K ). Mallory wants to figure out the plaintext of Alice\'92s reply. What we want to do is to manipulate M2 such that C1 = C2. Suppose that we set M2 = M1 XOR IV2 XOR IV1. Then we get the below equivalence relation: \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 C2 = E ( (M1 XOR IV2 XOR IV1) XOR IV2, K ) = C2 = E ( (M1 XOR IV1), K ) = C1. \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Considering that we have a finite number of possibilities for M1, Mallory can XOR all of Alice\'92s possible replies with IV1 and IV2 and tell Bob to encrypt it. Once Mallory finds ciphertext identical to Alice\'92s, Mallory can deduce the plaintext of Alice\'92s reply. \
+\
+(b) \
+\
+In CFB mode, we have C1 = E(IV1, K) XOR M1 and C2 = E(IV2, K) XOR M2. For Mallory to find out what Alice\'92s plaintext was, she needs to get C1 = C2. However, we can no longer manipulate M2 such that Bob is effectively encrypting the same thing for both Alice and Mallory. We can no longer change the message that is going into the block cipher encryption so that C1 = C2. Therefore, Mallory won\'92t be able to figure out Alice\'92s plaintext in CFB mode. \
+\
+
+\b Problem 3: \
+
+\b0 \
+Mallory knows \{M1, T1\} and \{M2, T2\}, or \{M1, MAC(K,M1\} and \{M2,  MAC(K,M2)\}. \
+\
+We want to find M3 such that T3 is a value that we know. Suppose that M3 is a message where  \
+P1 = M1 and P2 = T1 XOR M2. Then we have \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
+\cf0 T3 = AES( T1 XOR (T1 XOR M2), K) = AES(M2, K) = T2. \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+M3 is a two block message where P1 = M1 and P2 = T1 XOR M2. We have shown the tag of M3 is T3 = T2, which we know the value of. If Mallory construct M3 accordingly, she will know the value of T3. \
+\
+
+\b Problem 4: 
+\b0 \
+\
+S will compute a set of tuples P = (i,j) : xi = yj for all pairs (I, j) such that xi* = yj*.\
+Solution can use SHA-256 and/or AES with one of the three black cipher encryption\
+Modes discussed in class. Bear Hospital and Tree Hospital share a key k. \
+\
+Define a function F that Bear Hospital will use to transform xi into xi*, and define a function G that \
+Tree Hospital will use to transform yi into yi*. \
+\
+CBC. Hash helps hide the length. \
+\
+CBC is a pretty good choice. Use CBC and SHA-256 in order to ensure that we can get all of the properties of cryptographically hash functions while also protecting against the attacker hashing all of the possible names and matching them against the values obtained in S. \
+\
+(a) The Bear Hospital and Tree Hospital can use SHA-256 to hash all of the names, and use the hashed plaintexts as inputs into the CBC scheme. This way, we can ensure that we can obtain all of the properties of cryptographically strong hash functions while also protecting against the attacker hashing all of the possible names and matching them against the values obtained in S. This is ensured by using the secret key for encryption in CBC. \
+\
+(b) Requirement (1) is that if xi = yj, then ( i, j ) is in P. Since both hospitals are using the same deterministic hash functions and the same encryption schemes, xi* = yj* given that xi = yj. Therefore, S will not have any problem computing the set of tuples i and j such that xi = yj. \
+\
+(c) Requirement (2) is that if xi not equal to yj, then it is very unlikely that (i,j) will be in P. We can be confident that this requirement will hold since Sha-256 is a cryptographically strong hash function, and cryptographically strong hash functions possess the trait of being collision resistant. If we have a collision resistant hash function, it is by definition very unlikely that xi* = yj* given that xi not equal to yj. \
+\
+(d) Another property of cryptographically strong hash functions is that of pre-image resistance. Since we are concerned about Eve learning the name and medical information of the patient, we are worried about her obtaining information about our inputs into the hash function. S only contains results formed from the outputs of our hash functions, and since Sha-256 is pre-image resistant, Eve will not be able to find out anything about our inputs. \
+
+\b \
+Problem 5: \
+\
+
+\b0 (a) \
+\
+The hashing scheme aims to provide authentication that the user who requests access for the photo is indeed who they say they are. The scheme needs to reliably verify the identity of the user in order to give them access to the files that they want to view. In order to provide a legitimate authentication process, the hashing scheme develops the usage and functionality of MACs. We know that showphoto.php can check the hash value created with the secret key, and that checkfile.php creates the hash value formed with the secret key. This indicates that we have a symmetric-key mechanism, a defining property of MACs. In addition to the authentication that we desire, MACs also account for message integrity.  \
+
+\b \
+
+\b0 (b) \
+\
+We need a secret key as an input to the hash function because we want to make sure that an attacker cannot apply the hash function through a brute force method to figure out the hash value generated by checkfile. Since all of the file names are available to an attacker, we need a secret key to ensure that the attacker cannot use these files as an input to penetrate our defense mechanism.  \
+
+\b \
+Problem 6: Why do RSA signatures need a hash? \
+\
+
+\b0 (a) \
+\
+If Alice sends (M,S) = (M, M^d mod N) to Bob, Bob can just check if S^3 = M^(d*3) = M mod N holds.  \
+\
+(b) \
+\
+We know that for any S, S^3 = M mod N. Suppose we create any arbitrary S\'92. We know that S\'92 = M\'92^d mod N. Then we know that S\'92^3 = M\'92^(d * 3) =  M\'92 mod N. Then we can send message (S\'92^3, S\'92) and know that S\'92 is a valid signature on our message S\'92^3 = M\'92 mod N. \
+\
+(c) \
+\
+We know that we cube S in order to generate M. Consider S\'92 = 4S. When Bob sends S\'92, then Sameer will find that S\'92^3 = (4S)^3 = 64(S^3) = 64M mod N, leading him to think that Bob is bidding 64 times as much as his original bid. \
+
+\b \
+
+\b0 (d) \
+\
+No, the attacks in parts (b) and (c) are not possible against the real RSA signature scheme. Since S is now H(M)^d, we can conclude that S^3 = H(M). Since hash functions are one-way, it is intractable to find the original message. \
+}
