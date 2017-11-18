@@ -205,6 +205,9 @@ class PacketUtils:
         pkt = self.get_pkt()
         y = pkt[TCP].seq
 
+        # Send back an ACK.
+        self.send_pkt(payload = triggerfetch, flags = "A", seq = seq + 1, ack = y+1,  sport = source) 
+
         for i in range(1, hops):
             self.packetQueue = Queue.Queue(100000)
 
