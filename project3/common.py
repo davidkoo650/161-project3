@@ -219,6 +219,12 @@ class PacketUtils:
                           seq = seq + 1, ack = y + 1, sport = source)
 
             pkt = self.get_pkt()
+
+            if (!pkt) {
+                rst_list.append(False)
+                ip_list.append(None)
+            }
+
             prev = None
             while pkt:
                 prev = pkt
