@@ -224,7 +224,8 @@ class PacketUtils:
                     ip_list.append(prev[IP].src)
                     break;
                 if isTimeExceeded(prev):
-                    rst_list.append(True)
+                    rst_list.append(False)
                     ip_list.append(prev[IP].src)
+                    break;
                     
         return ip_list, rst_list
