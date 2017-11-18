@@ -211,28 +211,22 @@ class PacketUtils:
 
         for i in range(1, hops + 1):
 
-            sp = self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
-            print sp[TCP].flags
-            sp = self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
-            print sp[TCP].flags
-            sp = self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
-            print sp[TCP].flags
-
 
             pkt = self.get_pkt(2)
 
             rst_list.append(False)
             ip_list.append(None)
-
             last_index = len(rst_list) - 1
 
             while pkt:
 
                 if isTimeExceeded(pkt):
-                    rst_list[last_index] = False
                     ip_list[last_index] = pkt[IP].src
 
                 if isRST(pkt):
@@ -241,6 +235,5 @@ class PacketUtils:
                     break
 
                 pkt = self.get_pkt(2)
-
 
         return ip_list, rst_list
