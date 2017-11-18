@@ -232,7 +232,7 @@ class PacketUtils:
                 if isRST(pkt):
                     rst_list[last_index] = True
                     ip_list[last_index] = pkt[IP].src
-                    break
+                    return ip_list, rst_list
 
                 pkt = self.get_pkt(2)
 
