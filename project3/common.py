@@ -220,7 +220,7 @@ class PacketUtils:
 
             pkt = self.get_pkt()
 
-            if (!pkt) {
+            if (pkt.equals(None)) {
                 rst_list.append(False)
                 ip_list.append(None)
             }
