@@ -206,12 +206,13 @@ class PacketUtils:
         y = pkt[TCP].seq
 
         for i in range(1, hops):
+            self.packetQueue = Queue.Queue(100000)
 
-            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
                           seq = seq + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
                           seq = seq + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
                           seq = seq + 1, ack = y + 1, sport = source)
 
             pkt = self.get_pkt()
@@ -227,5 +228,5 @@ class PacketUtils:
                     rst_list.append(False)
                     ip_list.append(prev[IP].src)
                     break;
-                    
+
         return ip_list, rst_list
