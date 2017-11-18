@@ -199,7 +199,7 @@ class PacketUtils:
         ip_list = []
         rst_list = []
 
-        sent_p = self.send_pkt(flags = "S", dip = target, sport = source, seq = seq)
+        sent_p = self.send_pkt(flags = "S")
         sequence = sent_p.seq
         source = sent_p.sport
         pkt = self.get_pkt()
