@@ -175,8 +175,8 @@ class PacketUtils:
             return "DEAD"
         else: 
             y = pkt[TCP].seq
-            self.send_pkt(payload = triggerfetch, flags = "A", seq = seq + 1,
-                          ack = y+1,  sport = source)
+            self.send_pkt(payload = triggerfetch, flags = "A", seq = y,
+                          ack = seq + 1,  sport = source)
                           
             pkt = self.get_pkt()
             while pkt:
@@ -209,11 +209,11 @@ class PacketUtils:
             self.packetQueue = Queue.Queue(100000)
 
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
-                          seq = seq + 1, ack = y + 1, sport = source)
+                          seq = y, ack = seq + 1, sport = source)
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
-                          seq = seq + 1, ack = y + 1, sport = source)
+                          seq = y, ack = seq + 1, sport = source)
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
-                          seq = seq + 1, ack = y + 1, sport = source)
+                          seq = y, ack = seq + 1, sport = source)
 
             pkt = self.get_pkt()
 
@@ -229,7 +229,7 @@ class PacketUtils:
                 if isTimeExceeded(prev):
                     rst_list[last_index] = False
                     ip_list[last_index] = prev[IP].src
-                elif isRST(prev):
+                if isRST(prev):
                     rst_list[last_index] = True
                     ip_list[last_index] = prev[IP].src
                     break
