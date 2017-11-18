@@ -118,7 +118,7 @@ class PacketUtils:
 
 
     # Has an automatic 5 second timeout.
-    def get_pkt(self, timeout=5):
+    def get_pkt(self, timeout=15):
         try:
             return self.packetQueue.get(True, timeout)
         except Queue.Empty:
@@ -208,7 +208,7 @@ class PacketUtils:
         # Send back an ACK.
         self.send_pkt(flags = "A", seq = seq + 1, ack = y+1,  sport = source) 
 
-        for i in range(1, hops):
+        for i in range(1, hops + 1):
             self.packetQueue = Queue.Queue(100000)
 
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
@@ -223,7 +223,6 @@ class PacketUtils:
             if pkt == None:
                 rst_list.append(False)
                 ip_list.append(None)
-            
 
             prev = None
             while pkt:
