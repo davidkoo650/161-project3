@@ -201,7 +201,7 @@ class PacketUtils:
 
         source = random.randint(2000, 30000)
         seq = random.randint(1, 31313131)
-        self.send_pkt(flags = "S", sport = source, seq = seq)
+        self.send_pkt(flags = "S", dip = target, sport = source, seq = seq)
         pkt = self.get_pkt()
 
         if pkt is None:
@@ -211,17 +211,17 @@ class PacketUtils:
 
         for i in range(1, hops + 1):
 
-            sp = self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
+            sp = self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
             print sp[TCP].flags
-            sp = self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
+            sp = self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
             print sp[TCP].flags
-            sp = self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
+            sp = self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
             print sp[TCP].flags
 
-            
+
             pkt = self.get_pkt(2)
 
             rst_list.append(False)
