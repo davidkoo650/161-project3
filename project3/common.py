@@ -175,8 +175,8 @@ class PacketUtils:
             return "DEAD"
         else: 
             y = pkt[TCP].seq
-            self.send_pkt(payload = triggerfetch, flags = "A", seq = y,
-                          ack = seq + 1,  sport = source)
+            self.send_pkt(payload = triggerfetch, flags = "A", seq = seq + 1,
+                          ack = y+1,  sport = source)
                           
             pkt = self.get_pkt()
             while pkt:
