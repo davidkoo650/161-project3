@@ -203,10 +203,13 @@ class PacketUtils:
         seq = random.randint(1, 31313131)
         self.send_pkt(flags = "S", sport = source, seq = seq)
         pkt = self.get_pkt()
+
+        if pkt is None:
+            return
+
         y = pkt[TCP].seq
 
         for i in range(1, hops + 1):
-            self.packetQueue = Queue.Queue(100000)
 
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
@@ -229,9 +232,11 @@ class PacketUtils:
                 if isTimeExceeded(prev):
                     rst_list[last_index] = False
                     ip_list[last_index] = prev[IP].src
+                else:
+                    print(pkt[TCP].flags)
                 if isRST(prev):
                     rst_list[last_index] = True
                     ip_list[last_index] = prev[IP].src
                     break
-
+                    
         return ip_list, rst_list
