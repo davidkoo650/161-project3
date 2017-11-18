@@ -218,11 +218,13 @@ class PacketUtils:
             prev = None
             while pkt:
                 prev = pkt
-                pkt = self.get_pkt()
+                pkt = self.get_pkt();
                 if isRST(prev):
                     rst_list.append(True)
-                elif isTimeExceeded(prev):
-                    rst_list.append(False)
                     ip_list.append(prev[IP].src)
-
+                    break;
+                if isTimeExceeded(prev):
+                    rst_list.append(True)
+                    ip_list.append(prev[IP].src)
+                    
         return ip_list, rst_list
