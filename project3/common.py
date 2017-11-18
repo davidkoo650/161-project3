@@ -207,7 +207,7 @@ class PacketUtils:
 
         for i in range(1, hops + 1):
             self.packetQueue = Queue.Queue(100000)
- 
+
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
@@ -222,14 +222,16 @@ class PacketUtils:
 
             last_index = len(rst_list) - 1
 
+            prev = None
             while pkt:
-                if isTimeExceeded(pkt):
+                prev = pkt
+                pkt = self.get_pkt()
+                if isTimeExceeded(prev):
                     rst_list[last_index] = False
                     ip_list[last_index] = prev[IP].src
-                if isRST(pkt):
+                if isRST(prev):
                     rst_list[last_index] = True
                     ip_list[last_index] = prev[IP].src
                     break
-                pkt = self.get_pkt()
-                
+
         return ip_list, rst_list
