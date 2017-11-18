@@ -118,7 +118,7 @@ class PacketUtils:
 
 
     # Has an automatic 5 second timeout.
-    def get_pkt(self, timeout=15):
+    def get_pkt(self, timeout=5):
         try:
             return self.packetQueue.get(True, timeout)
         except Queue.Empty:
@@ -205,36 +205,33 @@ class PacketUtils:
         pkt = self.get_pkt()
         y = pkt[TCP].seq
 
-        # Send back an ACK.
-        self.send_pkt(flags = "A", seq = seq + 1, ack = y+1,  sport = source) 
-
         for i in range(1, hops + 1):
             self.packetQueue = Queue.Queue(100000)
 
-            self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
 
             pkt = self.get_pkt()
 
-            if pkt == None:
-                rst_list.append(False)
-                ip_list.append(None)
+            rst_list.append(False)
+            ip_list.append(None)
+            
+            last_index = len(rst_list) - 1
 
             prev = None
             while pkt:
                 prev = pkt
-                pkt = self.get_pkt();
+                pkt = self.get_pkt()
                 if isRST(prev):
-                    rst_list.append(True)
-                    ip_list.append(prev[IP].src)
-                    break;
+                    rst_list[last_index] = True
+                    ip_list[last_index] = prev[IP].src
+                    break
                 if isTimeExceeded(prev):
-                    rst_list.append(False)
-                    ip_list.append(prev[IP].src)
-                    break;
+                    rst_list[last_index] = False
+                    ip_list[last_index] = prev[IP].src
 
         return ip_list, rst_list
