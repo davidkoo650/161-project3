@@ -215,7 +215,7 @@ class PacketUtils:
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = seq + 1, ack = y + 1, sport = source)
 
-            pkt = self.get_pkt()
+            pkt = self.get_pkt(2)
 
             rst_list.append(False)
             ip_list.append(None)
@@ -225,7 +225,7 @@ class PacketUtils:
             prev = None
             while pkt:
                 prev = pkt
-                pkt = self.get_pkt()
+                pkt = self.get_pkt(2)
                 if isTimeExceeded(prev):
                     rst_list[last_index] = False
                     ip_list[last_index] = prev[IP].src
