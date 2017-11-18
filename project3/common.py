@@ -209,11 +209,11 @@ class PacketUtils:
             self.packetQueue = Queue.Queue(100000)
 
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
-                          seq = y, ack = seq + 1, sport = source)
+                          seq = seq + 1, ack = y + 1, sport = source)
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
-                          seq = y, ack = seq + 1, sport = source)
+                          seq = seq + 1, ack = y + 1, sport = source)
             self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
-                          seq = y, ack = seq + 1, sport = source)
+                          seq = seq + 1, ack = y + 1, sport = source)
 
             pkt = self.get_pkt()
 
