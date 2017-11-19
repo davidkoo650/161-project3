@@ -201,7 +201,7 @@ class PacketUtils:
 
         source = random.randint(2000, 30000)
         sequence = random.randint(1, 31313131)
-        self.send_pkt(flags = "S", seq = seq, sport = source, dip = target)
+        self.send_pkt(flags = "S", seq = sequence, sport = source, dip = target)
         pkt = self.get_pkt()
 
         if pkt is None:
