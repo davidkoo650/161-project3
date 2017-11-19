@@ -199,9 +199,9 @@ class PacketUtils:
         ip_list = []
         rst_list = []
 
-        sent_p = self.send_pkt(flags = "S")
-        sequence = sent_p.seq
-        source = sent_p.sport
+        source = random.randint(2000, 30000)
+        sequence = random.randint(1, 31313131)
+        self.send_pkt(flags = "S", seq = seq, sport = source, dip = target)
         pkt = self.get_pkt()
 
         if pkt is None:
