@@ -211,11 +211,11 @@ class PacketUtils:
 
         for i in range(1, hops + 1):
 
-            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
                           seq = sequence + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
                           seq = sequence + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "A",
+            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
                           seq = sequence + 1, ack = y + 1, sport = source)
 
             pkt = self.get_pkt()
