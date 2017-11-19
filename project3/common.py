@@ -209,6 +209,8 @@ class PacketUtils:
 
         y = pkt[TCP].seq
 
+        self.send_pkt(flags = "A", seq = sequence + 1, ack = y + 1, sport = source)
+
         for i in range(1, hops + 1):
 
             self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
