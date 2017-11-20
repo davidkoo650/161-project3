@@ -173,7 +173,7 @@ class PacketUtils:
 
         self.send_pkt(flags = "A", seq = seq+1, ack = y+1, sport = source)
 
-        seq = seq + 2
+        seq = seq + 1
         msgSize = len(msg)
         for i in range(0, msgSize):
             char = msg[i]
@@ -193,9 +193,9 @@ class PacketUtils:
             if not isTimeExceeded(pkt) and 'Raw' in pkt:
                 pkt.show()
                 part_payload = pkt['Raw'].load
-                payload += part_payload
-                pkt = self.get_pkt(endtime - time.time())
-
+                payload += part_payload  
+            pkt = self.get_pkt(endtime - time.time())
+            
         return payload
         
     # Returns "DEAD" if server isn't alive,
