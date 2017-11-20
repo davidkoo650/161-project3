@@ -151,7 +151,51 @@ class PacketUtils:
     # ttl is a ttl which triggers the Great Firewall but is before the
     # server itself (from a previous traceroute incantation
     def evade(self, target, msg, ttl):
-        return "NEED TO IMPLEMENT"
+        """
+
+        1.  Sends packets in such a way that web server constructs correctly
+            but the firewall doesn't. 
+        2.  Successful response from the web server.
+        3.  Return all payload returned by server over next 5 seconds.
+        4.  Firewall and receiver reception is different. 
+
+        """
+
+        # Get \search?= HTTP\1.1 \r\n \r\n
+
+        # Initial handshake. 
+        source = random.randint(2000, 30000)
+        seq = random.randint(1, 31313131)
+        self.send_pkt(flags = "S", seq = seq, sport = source)
+        pkt = self.get_pkt()
+
+        y = pkt[TCP].seq
+
+        self.send_pkt(flags = "A", seq = seq+1, ack = y+1, sport = source)
+
+        seq = seq + 2
+        msgSize = len(msg)
+        for i in range(0, msgSize):
+            char = msg[i]
+            dummChar = "z"
+            self.send_pkt(flags = "PA", payload = char, seq = seq,
+                          ack = y+1, sport = source, ttl = ttl)
+            self.send_pkt(flags = "PA", payload = dummChar, seq = seq,
+                          ack = y+1, sport = source, ttl = 24)
+            seq = seq + 1
+
+        pkt = self.get_pkt()
+        payload = ""
+
+        # CurrTime + 5 
+        endtime = time.time() + 5
+        while pkt:
+            if 'Raw' in pkt:
+                part_payload = pkt['Raw'].load
+                payload += part_payload
+                pkt = self.get_pkt(endtime - time.time())
+
+        return payload
         
     # Returns "DEAD" if server isn't alive,
     # "LIVE" if teh server is alive,

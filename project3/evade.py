@@ -18,6 +18,3 @@ if __name__ == '__main__':
     res = tr.evade(target, msg, int(sys.argv[1]))
     print res
     
-
-
-
