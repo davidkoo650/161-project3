@@ -225,14 +225,12 @@ class PacketUtils:
             last_index = len(rst_list) - 1
 
             while pkt:
-                if isTimeExceeded(pkt):
-                    ip_list[last_index] = pkt[IP].src
                 if isRST(pkt):
-                    print("Damn this shit sucks!")
                     rst_list[last_index] = True
                     ip_list[last_index] = pkt[IP].src
                     return ip_list, rst_list
-
+                if isTimeExceeded(pkt):
+                    ip_list[last_index] = pkt[IP].src
                 pkt = self.get_pkt()
 
         return ip_list, rst_list
