@@ -179,9 +179,9 @@ class PacketUtils:
             char = msg[i]
             dummChar = "z"
             self.send_pkt(flags = "PA", payload = char, seq = seq,
-                          ack = y+1, sport = source, ttl = ttl)
+                          ack = y+1, sport = source, ttl = 32)
             self.send_pkt(flags = "PA", payload = dummChar, seq = seq,
-                          ack = y+1, sport = source, ttl = 24)
+                          ack = y+1, sport = source, ttl = ttl)
             seq = seq + 1
 
         pkt = self.get_pkt()
@@ -190,7 +190,7 @@ class PacketUtils:
         # CurrTime + 5 
         endtime = time.time() + 5
         while pkt:
-            if 'Raw' in pkt:
+            if not isTimeExceeded(pkt) and 'Raw' in pkt:
                 pkt.show()
                 part_payload = pkt['Raw'].load
                 payload += part_payload
