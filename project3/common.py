@@ -219,13 +219,13 @@ class PacketUtils:
             pkt = self.get_pkt()
             
             while pkt:
-
                 if isRST(pkt):
                     rst_list[last_index] = True
                     ip_list[last_index] = pkt[IP].src
                     return ip_list, rst_list
                 if isTimeExceeded(pkt):
                     ip_list[last_index] = pkt[IP].src
+                pkt = self.get_pkt()
 
         return ip_list, rst_list
 
