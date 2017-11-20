@@ -191,6 +191,7 @@ class PacketUtils:
         endtime = time.time() + 5
         while pkt:
             if 'Raw' in pkt:
+                pkt.show()
                 part_payload = pkt['Raw'].load
                 payload += part_payload
                 pkt = self.get_pkt(endtime - time.time())
