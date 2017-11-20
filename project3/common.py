@@ -185,9 +185,6 @@ class PacketUtils:
                 pkt = self.get_pkt()
             return "LIVE"
 
-        self.send_msg([triggerfetch], dst=target, syn=True)
-        # return "NEED TO IMPLEMENT"
-
     # Format is
     # ([], [])
     # The first list is the list of IPs that have a hop
@@ -196,6 +193,29 @@ class PacketUtils:
     # if there is a RST back for that particular request
     def traceroute(self, target, hops):
         # RST and ICMP shoudl be treated the same by storing the ip and T/F values in corresponding lists.
+        ip_list = []
+        rst_list = []
+
+        source = random.randint(2000, 30000)
+        seq = random.randint(1, 31313131)
+        self.send_pkt(flags = "S", seq = seq, sport = source)
+        pkt = self.get_pkt()
+
+        if (isTimeExceeded(pkt)):
+            return "DEAD"
+        else: 
+            y = pkt[TCP].seq
+            self.send_pkt(payload = triggerfetch, flags = "A", seq = seq + 1,
+                          ack = y+1,  sport = source)
+                          
+            pkt = self.get_pkt()
+            while pkt:
+                if isRST(pkt):
+                    return "FIREWALL"
+                pkt = self.get_pkt()
+            return "LIVE"
+
+        """
         ip_list = []
         rst_list = []
 
@@ -239,5 +259,6 @@ class PacketUtils:
                     return ip_list, rst_list
                 if isTimeExceeded(pkt):
                     ip_list[last_index] = pkt[IP].src
+            """
 
         return ip_list, rst_list
