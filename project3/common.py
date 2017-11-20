@@ -197,68 +197,35 @@ class PacketUtils:
         rst_list = []
 
         source = random.randint(2000, 30000)
-        seq = random.randint(1, 31313131)
-        self.send_pkt(flags = "S", seq = seq, sport = source)
-        pkt = self.get_pkt()
-
-        if (isTimeExceeded(pkt)):
-            return "DEAD"
-        else: 
-            y = pkt[TCP].seq
-            self.send_pkt(payload = triggerfetch, flags = "A", seq = seq + 1,
-                          ack = y+1,  sport = source)
-                          
-            pkt = self.get_pkt()
-            while pkt:
-                if isRST(pkt):
-                    return "FIREWALL"
-                pkt = self.get_pkt()
-            return "LIVE"
-
-        """
-        ip_list = []
-        rst_list = []
-
-        source = random.randint(2000, 30000)
         sequence = random.randint(1, 31313131)
-        self.send_pkt(flags = "S", seq = sequence, sport = source, dip = target)
+        self.send_pkt(flags = "S", seq = sequence, sport = source)
         pkt = self.get_pkt()
-
-        if pkt is None:
-            return
 
         y = pkt[TCP].seq
 
-        self.send_pkt(flags = "A", seq = sequence + 1, ack = y + 1, sport = source)
-
         for i in range(1, hops + 1):
 
-            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = sequence + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = sequence + 1, ack = y + 1, sport = source)
-            self.send_pkt(ttl = i, dip = target, payload = triggerfetch, flags = "PA",
+            self.send_pkt(ttl = i, payload = triggerfetch, flags = "A",
                           seq = sequence + 1, ack = y + 1, sport = source)
-
-            pkt = self.get_pkt()
 
             rst_list.append(False)
             ip_list.append(None)
             last_index = len(rst_list) - 1
 
-            pkts_curr_hop = []
-
+            pkt = self.get_pkt()
+            
             while pkt:
-                pkts_curr_hop.append(pkt)
-                pkt = self.get_pkt()
-
-            for pkt in pkts_curr_hop:
+                
                 if isRST(pkt):
                     rst_list[last_index] = True
                     ip_list[last_index] = pkt[IP].src
                     return ip_list, rst_list
                 if isTimeExceeded(pkt):
-                    ip_list[last_index] = pkt[IP].src
-            """
+                    ip_list[last_index = pkt[IP].src
 
         return ip_list, rst_list
+
