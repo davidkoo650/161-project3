@@ -256,7 +256,7 @@ class PacketUtils:
                 self.send_pkt(ttl = i, payload = triggerfetch, flags = "PA",
                           seq = sequence + 1, ack = y + 1, sport = source)
 
-            pkt = self.get_pkt()
+            pkt = self.get_pkt(1)
 
             rst_list.append(False)
             ip_list.append(None)
@@ -269,7 +269,8 @@ class PacketUtils:
                 if isRST(pkt):
                     rst_list[last_index] = True
                     ip_list[last_index] = pkt[IP].src
+                    break
 
-                pkt = self.get_pkt()
+                pkt = self.get_pkt(1)
 
         return ip_list, rst_list
