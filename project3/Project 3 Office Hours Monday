@@ -1,0 +1,11 @@
+Project 3 Office Hours Monday:
+
+First submit, but attend office hours just to make sure that project is done correctly. 
+
+1. Go over question1.pcap output and question1.txt solutions with TA. 
+
+2. As long as firewall is triggered every time for ping.py I should be fine, correct?
+
+3. Ask about traceroute output. Traceroute doesn't generate the same output every single time, but frequently generates the correct one. 
+
+4. Ask if my output for evade is correct? Multiple HTTP requests, occasional RST, and response from Nick's Server. 
