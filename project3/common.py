@@ -268,7 +268,6 @@ class PacketUtils:
 
                 if isRST(pkt):
                     rst_list[last_index] = True
-                    return ip_list, rst_list
 
                 pkt = self.get_pkt(1)
 
