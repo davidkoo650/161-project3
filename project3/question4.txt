@@ -1,2 +1,7 @@
 Describe (in 2-3 paragraphs) your evasion strategy:
 
+My evasion strategy was inspired by the lecture material found in Lecture 18 Slide 15. The core idea in my strategy was to manipulate the ttl values for the payload such that some of the packets will reach the receiver while others will not. The packets that do reach the server combine to form a string that normally trigger the great firewall, and the packets that do not reach the server serve as ‘dummy’ packets that manipulates the Firewall’s behavior. 
+
+In order to implement this strategy, I divided the firewall triggering message into individual characters. For each individual character in the message, I sent a dummy character “z” along with it in order to manipulate the firewall. The ttl value for the fraction of the original message was set to a value that reliably reaches the receiving server, and the dummy character was set to a value that reliably reaches the firewall. 
+
+After sending all of the relevant packets, we return all the payload returned by the server over the next 5 seconds by creating a while loop that completes when the packet is either none or when 5 seconds have passed. 
