@@ -8,5 +8,5 @@ First submit, but attend office hours just to make sure that project is done cor
 
 3. Ask about traceroute output. Traceroute doesn't generate the same output every single time, but frequently generates the correct one.
 
-4. Ask if my output for evade is correct? Multiple HTTP requests, occasional RST, and response from Nick's Server. Go over the evasion strategy grading scheme. Occasionally evade doesn’t return any 404s. 
+4. Ask if my output for evade is correct? Multiple HTTP requests, occasional RST, and response from Nick's Server. Go over the evasion strategy grading scheme. Occasionally evade doesn’t return any 404s. Sometimes not getting anything. 
 
